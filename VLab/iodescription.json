@@ -1,0 +1,44 @@
+{
+    "inputs": [{
+            "id": "DataObject_images",
+            "inputType": "individual",
+            "valueType": "value",
+            "description": "URL to download the images",
+            "name": "Input images",
+            "obligation": true,
+            "hasDefault": false,
+            "valueSchema": "url",
+            "target": "data/images.tar.gz"
+        },
+        {
+            "id": "DataObject_annotations",
+            "inputType": "individual",
+            "valueType": "value",
+            "description": "URL to download the annotations",
+            "name": "Input annotations",
+            "obligation": true,
+            "hasDefault": false,
+            "valueSchema": "url",
+            "target": "data/annotations.tar.gz"
+        }
+    ],
+    "outputs": [{
+            "id": "DataObject_outimg",
+            "outputType": "individual",
+            "valueType": "value",
+            "description": "prediction mask png",
+            "name": "prediction mask png",
+            "valueSchema": "url",
+            "target": "data/prediction10.png"
+        },
+        {
+            "id": "DataObject_outimg",
+            "outputType": "individual",
+            "valueType": "value",
+            "description": "mask png",
+            "name": "mask png",
+            "valueSchema": "url",
+            "target": "data/mask10.png"
+        }
+    ]
+}
