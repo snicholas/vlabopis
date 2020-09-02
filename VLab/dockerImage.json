@@ -1,5 +1,5 @@
 {
-    "image": "snicholas/vlabopis",
+    "image": "snicholas/vlabopis:0.3",
     "privateimage": false,
     "resources": {
         "memory_mb": "5000",
