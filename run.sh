@@ -9,6 +9,6 @@ fi
 
 if [ -f /data/oxford_segmentation.h5 -a -f /data/image.png ]; then
     cp /data/oxford_segmentation.h5 /data/outputs/oxford_segmentation.h5
-    python execute.py 0
+    python main.py 0
 fi
 
