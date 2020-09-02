@@ -22,7 +22,7 @@
             "target": "/data/annotations.tar.gz"
         },
         {
-            "id": "DataObject_annotations",
+            "id": "DataObject_weights",
             "inputType": "individual",
             "valueType": "value",
             "description": "URL to download the model weights",
@@ -33,7 +33,7 @@
             "target": "/data/oxford_segmentation.h5"
         },
         {
-            "id": "DataObject_annotations",
+            "id": "DataObject_imageproc",
             "inputType": "individual",
             "valueType": "value",
             "description": "URL to download the image to be processed",
@@ -54,7 +54,7 @@
             "target": "/data/outputs/oxford_segmentation.h5"
         },
         {
-            "id": "DataObject_outimg",
+            "id": "DataObject_outweights",
             "outputType": "individual",
             "valueType": "value",
             "description": "Model weights",
