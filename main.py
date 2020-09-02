@@ -21,58 +21,20 @@ tar -xf annotations.tar.gz
 """
 
 import os
-
-input_dir = "/data/images/"
-target_dir = "/data/annotations/trimaps/"
-img_size = (160, 160)
-num_classes = 4
-batch_size = 32
-
-input_img_paths = sorted(
-    [
-        os.path.join(input_dir, fname)
-        for fname in os.listdir(input_dir)
-        if fname.endswith(".jpg")
-    ]
-)
-target_img_paths = sorted(
-    [
-        os.path.join(target_dir, fname)
-        for fname in os.listdir(target_dir)
-        if fname.endswith(".png") and not fname.startswith(".")
-    ]
-)
-
-print("Number of samples:", len(input_img_paths))
-
-for input_path, target_path in zip(input_img_paths[:10], target_img_paths[:10]):
-    print(input_path, "|", target_path)
-
-"""
-## What does one input image and corresponding segmentation mask look like?
-"""
+import sys
 
 from IPython.display import Image, display
 from tensorflow.keras.preprocessing.image import load_img
 import PIL
 from PIL import ImageOps
-
-# Display input image #7
-# display(Image(filename=input_img_paths[9]))
-
-# Display auto-contrast version of corresponding target (per-pixel categories)
-img = PIL.ImageOps.autocontrast(load_img(target_img_paths[9]))
-# display(img)
+from tensorflow import keras
+import numpy as np
+from tensorflow.keras.preprocessing.image import load_img
+from tensorflow.keras import layers
 
 """
 ## Prepare `Sequence` class to load & vectorize batches of data
 """
-
-from tensorflow import keras
-import numpy as np
-from tensorflow.keras.preprocessing.image import load_img
-
-
 class OxfordPets(keras.utils.Sequence):
     """Helper to iterate over the data (as Numpy arrays)."""
 
@@ -100,14 +62,9 @@ class OxfordPets(keras.utils.Sequence):
             y[j] = np.expand_dims(img, 2)
         return x, y
 
-
 """
 ## Perpare U-Net Xception-style model
 """
-
-from tensorflow.keras import layers
-
-
 def get_model(img_size, num_classes):
     inputs = keras.Input(shape=img_size + (3,))
 
@@ -165,86 +122,120 @@ def get_model(img_size, num_classes):
     model = keras.Model(inputs, outputs)
     return model
 
-
-# Free up RAM in case the model definition cells were run multiple times
-keras.backend.clear_session()
-
-# Build model
-model = get_model(img_size, num_classes)
-model.summary()
-
-"""
-## Set aside a validation split
-"""
-
-import random
-
-# Split our img paths into a training and a validation set
-val_samples = 1000
-random.Random(1337).shuffle(input_img_paths)
-random.Random(1337).shuffle(target_img_paths)
-train_input_img_paths = input_img_paths[:-val_samples]
-train_target_img_paths = target_img_paths[:-val_samples]
-val_input_img_paths = input_img_paths[-val_samples:]
-val_target_img_paths = target_img_paths[-val_samples:]
-
-# Instantiate data Sequences for each split
-train_gen = OxfordPets(
-    batch_size, img_size, train_input_img_paths, train_target_img_paths
-)
-val_gen = OxfordPets(batch_size, img_size, val_input_img_paths, val_target_img_paths)
-
-"""
-## Train the model
-"""
-
-# Configure the model for training.
-# We use the "sparse" version of categorical_crossentropy
-# because our target data is integers.
-model.compile(optimizer="rmsprop", loss="sparse_categorical_crossentropy")
-
-callbacks = [
-    keras.callbacks.ModelCheckpoint("oxford_segmentation.h5", save_best_only=True)
-]
-
-# Train the model, doing validation at the end of each epoch.
-epochs = 15
-model.fit(train_gen, epochs=epochs, validation_data=val_gen, callbacks=callbacks)
-
-"""
-## Visualize predictions
-"""
-
-# Generate predictions for all images in the validation set
-
-val_gen = OxfordPets(batch_size, img_size, val_input_img_paths, val_target_img_paths)
-val_preds = model.predict(val_gen)
-
-
-def display_mask(i):
-    """Quick utility to display a model's prediction."""
-    mask = np.argmax(val_preds[i], axis=-1)
-    mask = np.expand_dims(mask, axis=-1)
-    img = PIL.ImageOps.autocontrast(keras.preprocessing.image.array_to_img(mask))
-    display(img)
-
-def save_mask(i):
+def save_mask(name, i):
     """Save model's prediction to disk."""
     mask = np.argmax(val_preds[i], axis=-1)
     mask = np.expand_dims(mask, axis=-1)
     img = PIL.ImageOps.autocontrast(keras.preprocessing.image.array_to_img(mask))
-    img.save("/data/outputs/prediction{0}.png".format(i))
+    img.save("/data/outputs/{0}.png".format(name))
 
-# Display results for validation image #10
-i = 10
+mode = int(sys.argv[1])
+if mode==0:
+    #execute
+    input_dir = "/data/images/"
+    img_size = (160, 160)
+    num_classes = 4
+    batch_size = 32
+    keras.backend.clear_session()
 
-# Display input image
-# display(Image(filename=val_input_img_paths[i]))
+    # Build model
+    model = get_model(img_size, num_classes)
+    model.summary()
+    model.load_weights("oxford_segmentation.h5")
+    model.compile(optimizer="rmsprop", loss="sparse_categorical_crossentropy")
 
-# Display ground-truth target mask
-img = PIL.ImageOps.autocontrast(load_img(val_target_img_paths[i]))
-# display(img)
-img.save("/data/outputs/mask{0}.png".format(i))
+    val_input_img_paths = sorted(
+        [
+            os.path.join(input_dir, fname)
+            for fname in os.listdir(input_dir)
+            if fname.endswith(".jpg") or name.endswith(".png")
+        ]
+    )
 
-# Display mask predicted by our model
-save_mask(i)  # Note that the model only sees inputs at 150x150.
+    val_gen = OxfordPets(batch_size, img_size, val_input_img_paths, [])
+    val_preds = model.predict(val_gen)
+    save_mask("prediction", i)
+elif mode==1:
+    #train:
+    input_dir = "/data/images/"
+    target_dir = "/data/annotations/trimaps/"
+    img_size = (160, 160)
+    num_classes = 4
+    batch_size = 32
+    input_img_paths = sorted(
+        [
+            os.path.join(input_dir, fname)
+            for fname in os.listdir(input_dir)
+            if fname.endswith(".jpg")
+        ]
+    )
+    target_img_paths = sorted(
+        [
+            os.path.join(target_dir, fname)
+            for fname in os.listdir(target_dir)
+            if fname.endswith(".png") and not fname.startswith(".")
+        ]
+    )
+
+    print("Number of samples:", len(input_img_paths))
+
+    for input_path, target_path in zip(input_img_paths[:10], target_img_paths[:10]):
+        print(input_path, "|", target_path)
+
+    keras.backend.clear_session()
+    # Build model
+    model = get_model(img_size, num_classes)
+    model.summary()
+    """
+    ## Set aside a validation split
+    """
+    import random
+
+    # Split our img paths into a training and a validation set
+    val_samples = 1000
+    random.Random(1337).shuffle(input_img_paths)
+    random.Random(1337).shuffle(target_img_paths)
+    train_input_img_paths = input_img_paths[:-val_samples]
+    train_target_img_paths = target_img_paths[:-val_samples]
+    val_input_img_paths = input_img_paths[-val_samples:]
+    val_target_img_paths = target_img_paths[-val_samples:]
+
+    # Instantiate data Sequences for each split
+    train_gen = OxfordPets(
+        batch_size, img_size, train_input_img_paths, train_target_img_paths
+    )
+    val_gen = OxfordPets(batch_size, img_size, val_input_img_paths, val_target_img_paths)
+
+    """
+    ## Train the model
+    """
+
+    # Configure the model for training.
+    # We use the "sparse" version of categorical_crossentropy
+    # because our target data is integers.
+    model.compile(optimizer="rmsprop", loss="sparse_categorical_crossentropy")
+
+    callbacks = [
+        keras.callbacks.ModelCheckpoint("oxford_segmentation.h5", save_best_only=True)
+    ]
+
+    # Train the model, doing validation at the end of each epoch.
+    epochs = 15
+    model.fit(train_gen, epochs=epochs, validation_data=val_gen, callbacks=callbacks)
+
+    """
+    ## Visualize predictions
+    """
+    # Generate predictions for all images in the validation set
+    val_gen = OxfordPets(batch_size, img_size, val_input_img_paths, val_target_img_paths)
+    val_preds = model.predict(val_gen)
+    # Display results for validation image #10
+    i = 10
+    # Display input image
+    # display(Image(filename=val_input_img_paths[i]))
+    # Display ground-truth target mask
+    #img = PIL.ImageOps.autocontrast(load_img(val_target_img_paths[i]))
+    # display(img)
+    #img.save("/data/outputs/mask{0}.png".format(i))
+    # Display mask predicted by our model
+    save_mask("prediction", i)  # Note that the model only sees inputs at 150x150.

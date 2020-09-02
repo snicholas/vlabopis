@@ -5,7 +5,7 @@
             "valueType": "value",
             "description": "URL to download the images",
             "name": "Input images",
-            "obligation": true,
+            "obligation": false,
             "hasDefault": false,
             "valueSchema": "url",
             "target": "data/images.tar.gz"
@@ -16,10 +16,32 @@
             "valueType": "value",
             "description": "URL to download the annotations",
             "name": "Input annotations",
-            "obligation": true,
+            "obligation": false,
             "hasDefault": false,
             "valueSchema": "url",
             "target": "data/annotations.tar.gz"
+        },
+        {
+            "id": "DataObject_annotations",
+            "inputType": "individual",
+            "valueType": "value",
+            "description": "URL to download the model weights",
+            "name": "Model weights",
+            "obligation": false,
+            "hasDefault": false,
+            "valueSchema": "url",
+            "target": "data/oxford_segmentation.h5"
+        },
+        {
+            "id": "DataObject_annotations",
+            "inputType": "individual",
+            "valueType": "value",
+            "description": "URL to download the image to be processed",
+            "name": "Input image to be processed",
+            "obligation": false,
+            "hasDefault": false,
+            "valueSchema": "url",
+            "target": "data/images/image.png"
         }
     ],
     "outputs": [{
@@ -29,16 +51,16 @@
             "description": "prediction mask png",
             "name": "prediction mask png",
             "valueSchema": "url",
-            "target": "data/prediction10.png"
+            "target": "data/oxford_segmentation.h5"
         },
         {
             "id": "DataObject_outimg",
             "outputType": "individual",
             "valueType": "value",
-            "description": "mask png",
-            "name": "mask png",
+            "description": "Model weights",
+            "name": "model weights",
             "valueSchema": "url",
-            "target": "data/mask10.png"
+            "target": "data/output/prediction.png"
         }
     ]
 }

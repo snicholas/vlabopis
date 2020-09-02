@@ -220,6 +220,14 @@ model.fit(train_gen, epochs=epochs, validation_data=val_gen, callbacks=callbacks
 val_gen = OxfordPets(batch_size, img_size, val_input_img_paths, val_target_img_paths)
 val_preds = model.predict(val_gen)
 
+
+def display_mask(i):
+    """Quick utility to display a model's prediction."""
+    mask = np.argmax(val_preds[i], axis=-1)
+    mask = np.expand_dims(mask, axis=-1)
+    img = PIL.ImageOps.autocontrast(keras.preprocessing.image.array_to_img(mask))
+    display(img)
+
 def save_mask(i):
     """Save model's prediction to disk."""
     mask = np.argmax(val_preds[i], axis=-1)
