@@ -141,20 +141,20 @@ if mode==0:
     # Build model
     model = get_model(img_size, num_classes)
     model.summary()
-    model.load_weights("oxford_segmentation.h5")
+    model.load_weights("/data/oxford_segmentation.h5")
     model.compile(optimizer="rmsprop", loss="sparse_categorical_crossentropy")
 
     val_input_img_paths = sorted(
         [
             os.path.join(input_dir, fname)
             for fname in os.listdir(input_dir)
-            if fname.endswith(".jpg") or name.endswith(".png")
+            if fname.endswith(".jpg") or fname.endswith(".png")
         ]
     )
 
     val_gen = OxfordPets(batch_size, img_size, val_input_img_paths, [])
     val_preds = model.predict(val_gen)
-    save_mask("prediction", i)
+    save_mask("prediction", 0)
 elif mode==1:
     #train:
     input_dir = "/data/images/"
@@ -216,7 +216,7 @@ elif mode==1:
     model.compile(optimizer="rmsprop", loss="sparse_categorical_crossentropy")
 
     callbacks = [
-        keras.callbacks.ModelCheckpoint("oxford_segmentation.h5", save_best_only=True)
+        keras.callbacks.ModelCheckpoint("/data/outputs/oxford_segmentation.h5", save_best_only=True)
     ]
 
     # Train the model, doing validation at the end of each epoch.

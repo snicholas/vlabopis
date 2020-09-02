@@ -10,8 +10,8 @@
             "pathType": "FILE"
         },
         {
-            "repoPath": "requirements.py",
-            "targetPath": "requirements.py",
+            "repoPath": "requirements.txt",
+            "targetPath": "requirements.txt",
             "pathType": "FILE"
         }
     ]

@@ -8,7 +8,7 @@
             "obligation": false,
             "hasDefault": false,
             "valueSchema": "url",
-            "target": "data/images.tar.gz"
+            "target": "/data/images.tar.gz"
         },
         {
             "id": "DataObject_annotations",
@@ -19,7 +19,7 @@
             "obligation": false,
             "hasDefault": false,
             "valueSchema": "url",
-            "target": "data/annotations.tar.gz"
+            "target": "/data/annotations.tar.gz"
         },
         {
             "id": "DataObject_annotations",
@@ -30,7 +30,7 @@
             "obligation": false,
             "hasDefault": false,
             "valueSchema": "url",
-            "target": "data/oxford_segmentation.h5"
+            "target": "/data/oxford_segmentation.h5"
         },
         {
             "id": "DataObject_annotations",
@@ -41,7 +41,7 @@
             "obligation": false,
             "hasDefault": false,
             "valueSchema": "url",
-            "target": "data/images/image.png"
+            "target": "/data/images/image.png"
         }
     ],
     "outputs": [{
@@ -51,7 +51,7 @@
             "description": "prediction mask png",
             "name": "prediction mask png",
             "valueSchema": "url",
-            "target": "data/oxford_segmentation.h5"
+            "target": "/data/outputs/oxford_segmentation.h5"
         },
         {
             "id": "DataObject_outimg",
@@ -60,7 +60,7 @@
             "description": "Model weights",
             "name": "model weights",
             "valueSchema": "url",
-            "target": "data/output/prediction.png"
+            "target": "/data/output/prediction.png"
         }
     ]
 }
