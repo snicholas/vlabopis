@@ -156,6 +156,7 @@ if mode==0:
     batch_size = len(val_input_img_paths)
     if (batch_size>32):
         batch_size=32
+    print("batch_size = {0}".format(batch_size))
     val_gen = OxfordPets(batch_size, img_size, val_input_img_paths, [])
     val_preds = model.predict(val_gen)
     save_mask("prediction", 0)
