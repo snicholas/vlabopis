@@ -127,13 +127,13 @@ def save_mask(name, i):
     mask = np.argmax(val_preds[i], axis=-1)
     mask = np.expand_dims(mask, axis=-1)
     img = PIL.ImageOps.autocontrast(keras.preprocessing.image.array_to_img(mask))
-    img.save("/data/outputs/{0}.png".format(name))
+    img.save("data/outputs/{0}.png".format(name))
 
 mode = int(sys.argv[1])
 print("Mode {0}".format(str(mode)))
 if mode==0:
     #execute
-    input_dir = "/data/images/"
+    input_dir = "data/images/"
     img_size = (160, 160)
     num_classes = 4
     batch_size = 32
@@ -142,7 +142,7 @@ if mode==0:
     # Build model
     model = get_model(img_size, num_classes)
     model.summary()
-    model.load_weights("/data/oxford_segmentation.h5")
+    model.load_weights("data/oxford_segmentation.h5")
     model.compile(optimizer="rmsprop", loss="sparse_categorical_crossentropy")
 
     val_input_img_paths = sorted(
@@ -158,8 +158,8 @@ if mode==0:
     save_mask("prediction", 0)
 elif mode==1:
     #train:
-    input_dir = "/data/images/"
-    target_dir = "/data/annotations/trimaps/"
+    input_dir = "data/images/"
+    target_dir = "data/annotations/trimaps/"
     img_size = (160, 160)
     num_classes = 4
     batch_size = 32
@@ -217,7 +217,7 @@ elif mode==1:
     model.compile(optimizer="rmsprop", loss="sparse_categorical_crossentropy")
 
     callbacks = [
-        keras.callbacks.ModelCheckpoint("/data/outputs/oxford_segmentation.h5", save_best_only=True)
+        keras.callbacks.ModelCheckpoint("data/outputs/oxford_segmentation.h5", save_best_only=True)
     ]
 
     # Train the model, doing validation at the end of each epoch.
@@ -237,6 +237,6 @@ elif mode==1:
     # Display ground-truth target mask
     #img = PIL.ImageOps.autocontrast(load_img(val_target_img_paths[i]))
     # display(img)
-    #img.save("/data/outputs/mask{0}.png".format(i))
+    #img.save("data/outputs/mask{0}.png".format(i))
     # Display mask predicted by our model
     save_mask("prediction", i)  # Note that the model only sees inputs at 150x150.
