@@ -133,7 +133,7 @@ mode = int(sys.argv[1])
 print("Mode {0}".format(str(mode)))
 if mode==0:
     #execute
-    input_dir = "data/images/"
+    input_dir = "data/inputs/"
     img_size = (160, 160)
     num_classes = 4
     batch_size = 1
