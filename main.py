@@ -136,7 +136,7 @@ if mode==0:
     input_dir = "data/images/"
     img_size = (160, 160)
     num_classes = 4
-    batch_size = 32
+    batch_size = 1
     keras.backend.clear_session()
 
     # Build model
@@ -152,7 +152,10 @@ if mode==0:
             if fname.endswith(".jpg") or fname.endswith(".png")
         ]
     )
-
+    
+    batch_size = len(val_input_img_paths)
+    if (batch_size>32):
+        batch_size=32
     val_gen = OxfordPets(batch_size, img_size, val_input_img_paths, [])
     val_preds = model.predict(val_gen)
     save_mask("prediction", 0)
