@@ -5,9 +5,9 @@ if [ -f data/images.tar.gz -a -f data/annotations.tar.gz ]; then
     cd data
     ls -lh 
     echo "Unpackaging images.tar.gz"
-    tar -xf data/images.tar.gz
+    tar -xf images.tar.gz
     echo "Unpackaging annotations.tar.gz"
-    tar -xf data/annotations.tar.gz
+    tar -xf annotations.tar.gz
     ls -lh
     cd ..
     echo "run training"
