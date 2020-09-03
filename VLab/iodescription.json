@@ -44,23 +44,24 @@
             "target": "/data/images/image.png"
         }
     ],
-    "outputs": [{
-            "id": "DataObject_outimg",
-            "outputType": "individual",
-            "valueType": "value",
-            "description": "prediction mask png",
-            "name": "prediction mask png",
-            "valueSchema": "url",
-            "target": "/data/outputs/oxford_segmentation.h5"
-        },
+    "outputs": [
         {
             "id": "DataObject_outweights",
             "outputType": "individual",
             "valueType": "value",
-            "description": "Model weights",
+            "description": "prediction mask png",
             "name": "model weights",
             "valueSchema": "url",
-            "target": "/data/output/prediction.png"
+            "target": "/data/outputs/prediction.png"
+        },
+        {
+            "id": "DataObject_outimg",
+            "outputType": "individual",
+            "valueType": "value",
+            "description": "Model weights",
+            "name": "prediction mask png",
+            "valueSchema": "url",
+            "target": "/data/outputs/oxford_segmentation.h5"
         }
     ]
 }
