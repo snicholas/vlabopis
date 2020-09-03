@@ -41,7 +41,7 @@
             "obligation": false,
             "hasDefault": false,
             "valueSchema": "url",
-            "target": "data/images/image.jpg"
+            "target": "data/inputs/image.jpg"
         }
     ],
     "outputs": [{
