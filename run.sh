@@ -2,11 +2,14 @@
 echo "Model start"
 pwd
 ls -l
-ls -l data/
+
 
 if [ -f data/images.tar.gz -a -f data/annotations.tar.gz ]; then
+    echo "Unpackaging images.tar.gz"
     tar -xf data/images.tar.gz
+    echo "Unpackaging annotations.tar.gz"
     tar -xf data/annotations.tar.gz
+    ls -l data/    
     echo "run training"
     python main.py 1
     echo "ended training"
