@@ -130,6 +130,7 @@ def save_mask(name, i):
     img.save("/data/outputs/{0}.png".format(name))
 
 mode = int(sys.argv[1])
+print("Mode {0}".format(str(mode)))
 if mode==0:
     #execute
     input_dir = "/data/images/"
