@@ -162,8 +162,8 @@ if mode==0:
     save_mask("prediction", 0)
 elif mode==1:
     #train:
-    input_dir = "data/images/"
-    target_dir = "data/annotations/trimaps/"
+    input_dir = "/tmp/data/images/"
+    target_dir = "/tmp/data/annotations/trimaps/"
     img_size = (160, 160)
     num_classes = 4
     batch_size = 32
