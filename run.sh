@@ -2,15 +2,14 @@
 echo "Model start"
 
 if [ -f data/images.tar.gz -a -f data/annotations.tar.gz ]; then
-    mkdir -p /tmp/data
-    cp data/images.tar.gz /tmp/data/images.tar.gz
-    cp data/annotations.tar.gz /tmp/data/annotations.tar.gz
-    ls -lh /tmp/data/
+    cd data
+    ls -lh 
     echo "Unpackaging images.tar.gz"
-    tar -xf /tmp/data/images.tar.gz
+    tar -xf data/images.tar.gz
     echo "Unpackaging annotations.tar.gz"
-    tar -xf /tmp/data/annotations.tar.gz
-    ls -lh /tmp/data/    
+    tar -xf data/annotations.tar.gz
+    ls -lh
+    cd ..
     echo "run training"
     python main.py 1
     echo "ended training"
