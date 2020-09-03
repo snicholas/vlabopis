@@ -45,20 +45,20 @@
         }
     ],
     "outputs": [{
-            "id": "DataObject_outweights",
+            "id": "DataObject_outimg",
             "outputType": "individual",
             "valueType": "value",
             "description": "prediction mask png",
-            "name": "model weights",
+            "name": "prediction mask png",
             "valueSchema": "url",
             "target": "data/outputs/prediction.png"
         },
         {
-            "id": "DataObject_outimg",
+            "id": "DataObject_outweights",
             "outputType": "individual",
             "valueType": "value",
             "description": "Model weights",
-            "name": "prediction mask png",
+            "name": "Model weights",
             "valueSchema": "url",
             "target": "data/outputs/oxford_segmentation.h5"
         }
